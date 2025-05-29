@@ -1,39 +1,55 @@
 <?php
-require_once(__DIR__ . '/navbarColaborador.php'); // Para mantener la sesión y el estilo
+require_once(__DIR__ . '/navbarColaborador.php'); // Asegura la sesión y el objeto $colaborador
 
 if (!isset($_SESSION["colaborador"])) {
     header("Location: /PuntosReciclaje/index.php");
     exit();
 }
-$colaborador = $_SESSION["colaborador"];
+$colaborador = $_SESSION["colaborador"]; // Este es un objeto Colaborador
 
-// Lógica para manejar el POST del formulario
-$mensaje = "";
-$tipo_mensaje = "";
+$mensaje_feedback = ""; // Renombrado para claridad
+$tipo_mensaje_feedback = ""; // 'success', 'danger', 'info'
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_colaborador'])) {
-    // Aquí procesarías los datos del formulario
-    // Por ejemplo:
-    // $nuevo_nombre_colab = $_POST['nombre_colaborador'];
-    // $nuevo_tipo_residuo = $_POST['tipo_residuo'];
-    // $nuevo_servicio = $_POST['servicio_ofrecido'];
-    // ...llamar a un método en $colaborador o en una clase de lógica para actualizar la BD...
+    // Recoger datos del formulario
+    $nuevo_nombre_colab = isset($_POST['nombre_colaborador']) ? trim($_POST['nombre_colaborador']) : '';
+    $nuevo_correo_colab = isset($_POST['correo_colaborador']) ? trim($_POST['correo_colaborador']) : '';
+    $nuevo_tipo_residuo = isset($_POST['tipo_residuo']) ? trim($_POST['tipo_residuo']) : '';
+    $nuevo_servicio_ofrecido = isset($_POST['servicio_ofrecido']) ? trim($_POST['servicio_ofrecido']) : '';
 
-    // Ejemplo de mensaje (reemplazar con lógica real):
-    // if (actualizacion_exitosa) {
-    //    $mensaje = "¡Información del colaborador actualizada correctamente!";
-    //    $tipo_mensaje = "success";
-    //    // Actualizar el objeto $colaborador en la sesión
-    //    // $_SESSION["colaborador"] = $colaboradorActualizado;
-    //    // $colaborador = $colaboradorActualizado;
-    // } else {
-    //    $mensaje = "Error al actualizar la información del colaborador.";
-    //    $tipo_mensaje = "danger";
-    // }
-    $mensaje = "Funcionalidad de actualización en desarrollo."; // Placeholder
-    $tipo_mensaje = "info";
+    // Validaciones básicas del lado del servidor
+    if (empty($nuevo_nombre_colab) || empty($nuevo_correo_colab) || empty($nuevo_tipo_residuo) || empty($nuevo_servicio_ofrecido)) {
+        $mensaje_feedback = "Todos los campos (nombre, correo, tipo de residuo, servicio) son obligatorios.";
+        $tipo_mensaje_feedback = "danger";
+    } elseif (!filter_var($nuevo_correo_colab, FILTER_VALIDATE_EMAIL)) {
+        $mensaje_feedback = "El formato del correo electrónico no es válido.";
+        $tipo_mensaje_feedback = "danger";
+    } else {
+        // Intentar actualizar los datos llamando al método del objeto Colaborador
+        // El método actualizarMisDatos ya existe en la clase Colaborador y fue proporcionado anteriormente
+        $resultadoActualizacion = $colaborador->actualizarMisDatos(
+            $nuevo_nombre_colab,
+            $nuevo_tipo_residuo,
+            $nuevo_servicio_ofrecido,
+            $nuevo_correo_colab
+        );
+
+        $mensaje_feedback = $resultadoActualizacion['message'];
+        if ($resultadoActualizacion['success']) {
+            // Si la actualización fue exitosa (incluso si solo fue parcial o no hubo cambios netos pero sin errores graves)
+            $tipo_mensaje_feedback = "success";
+            if (strpos($mensaje_feedback, "No se realizaron cambios") !== false || strpos($mensaje_feedback, "No se detectaron cambios") !== false ) {
+                $tipo_mensaje_feedback = "info"; // Si no hubo cambios, un mensaje 'info' es más apropiado
+            }
+            // Re-guardar el objeto $colaborador en la sesión para reflejar los cambios inmediatamente
+            $_SESSION["colaborador"] = $colaborador;
+        } else {
+            // Si hubo un fallo explícito en la actualización
+            $tipo_mensaje_feedback = "danger";
+        }
+    }
 }
-
+// El resto del HTML del formulario (ya proporcionado en la respuesta anterior) sigue aquí...
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -43,24 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_colaborado
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Actualizar Info. Colaborador - Puntos de Reciclaje</title>
     <style>
-        body {
-            background-color: #eef1f5;
-        }
-        .update-form-card {
-            margin-top: 50px;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-        .update-form-card h2 {
-            color: #333;
-            margin-bottom: 25px;
-        }
-        .form-label {
-            font-weight: bold;
-            color: #555;
-        }
+        body { background-color: #eef1f5; }
+        .update-form-card { margin-top: 50px; padding: 30px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); background-color: #fff; }
+        .update-form-card h2 { color: #333; margin-bottom: 25px; }
+        .form-label { font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
@@ -70,9 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_colaborado
                 <div class="update-form-card">
                     <h2 class="text-center">Actualizar Datos del Colaborador</h2>
                     
-                    <?php if ($mensaje): ?>
-                        <div class="alert alert-<?php echo $tipo_mensaje; ?> alert-dismissible fade show" role="alert">
-                            <?php echo htmlspecialchars($mensaje); ?>
+                    <?php if ($mensaje_feedback): // Usar la variable renombrada ?>
+                        <div class="alert alert-<?php echo htmlspecialchars($tipo_mensaje_feedback); ?> alert-dismissible fade show" role="alert">
+                            <?php echo htmlspecialchars($mensaje_feedback); ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>
@@ -87,9 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_colaborado
                             <input type="email" class="form-control" id="correo_colaborador" name="correo_colaborador" value="<?php
                                 if ($colaborador->getCuenta() && method_exists($colaborador->getCuenta(), 'getCorreo')) {
                                     echo htmlspecialchars($colaborador->getCuenta()->getCorreo());
-                                }
+                                } else { echo ''; /* Evitar error si no hay cuenta o método */ }
                             ?>" required>
-                            <small class="form-text text-muted">Cambiar el correo puede requerir una nueva verificación.</small>
                         </div>
                         <div class="mb-3">
                             <label for="tipo_residuo" class="form-label">Tipo de Residuo Principal:</label>

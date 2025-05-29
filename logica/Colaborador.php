@@ -9,14 +9,14 @@ class Colaborador{
     private $nombre;
     private $tipo_residuo;
     private $servicio_ofrecido;
-    private $cuenta; // Objeto Cuenta
+    private $cuenta; // Debe ser un objeto Cuenta
 
     public function __construct($idColaborador = 0, $nombre = "", $tipo_residuo = "", $servicio_ofrecido = "", $cuenta = null){
         $this->idColaborador = $idColaborador;
         $this->nombre = $nombre;
         $this->tipo_residuo = $tipo_residuo;
         $this->servicio_ofrecido = $servicio_ofrecido;
-        $this->cuenta = $cuenta; // Debe ser un objeto Cuenta
+        $this->cuenta = $cuenta;
     }
 
     public function registrar($nombre, $tipo_residuo, $servicio_ofrecido, $idCuenta){
@@ -37,13 +37,14 @@ class Colaborador{
         $conexion->cerrarConexion();
 
         if (!$datosColaborador) {
+            error_log("COLABORADOR LOGIC: No details found for colaborador with idCuenta: " . $idCuenta);
             return false;
         }
         $this->idColaborador = $datosColaborador['idColaborador'];
         $this->nombre = $datosColaborador['nombre'];
         $this->tipo_residuo = $datosColaborador['tipo_residuo'];
         $this->servicio_ofrecido = $datosColaborador['servicio_ofrecido'];
-        $this->cuenta = $cuentaObject; // Asigna el objeto Cuenta
+        $this->cuenta = $cuentaObject;
         return true;
     }
 
@@ -56,59 +57,74 @@ class Colaborador{
      * @return array ['success' => bool, 'message' => string]
      */
     public function actualizarMisDatos($nuevoNombre, $nuevoTipoResiduo, $nuevoServicioOfrecido, $nuevoCorreo) {
+        if (!$this->cuenta || !$this->idColaborador) {
+            return ['success' => false, 'message' => "Error: Datos del colaborador o cuenta no cargados."];
+        }
+
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $colaboradorDAO = new ColaboradorDAO();
         $cuentaDAO = new CuentaDAO();
 
-        $datosActualizados = false;
-        $correoActualizado = false;
-        $mensajeGlobal = "";
+        $cambiosRealizados = false; // Para rastrear si algo realmente cambió
+        $mensajes = []; // Para acumular mensajes de éxito o error parcial
 
         // 1. Actualizar datos específicos del Colaborador
+        // Solo actualiza si los datos han cambiado
+        $colaboradorDataCambio = false;
         if ($this->nombre !== $nuevoNombre || $this->tipo_residuo !== $nuevoTipoResiduo || $this->servicio_ofrecido !== $nuevoServicioOfrecido) {
+            $colaboradorDataCambio = true;
+        }
+
+        if ($colaboradorDataCambio) {
             if ($colaboradorDAO->actualizar($conexion, $this->idColaborador, $nuevoNombre, $nuevoTipoResiduo, $nuevoServicioOfrecido)) {
                 $this->nombre = $nuevoNombre;
                 $this->tipo_residuo = $nuevoTipoResiduo;
                 $this->servicio_ofrecido = $nuevoServicioOfrecido;
-                $datosActualizados = true;
+                $mensajes[] = "Datos del perfil del colaborador actualizados.";
+                $cambiosRealizados = true;
             } else {
-                // Error o no cambios
+                // Podría ser que la consulta falló o que los datos eran idénticos y no se afectaron filas.
+                // Si affected_rows es 0 pero no hubo error SQL, no es necesariamente un fallo de la operación.
+                 $mensajes[] = "No se realizaron cambios en los datos del perfil del colaborador o hubo un error.";
             }
         }
 
-        // 2. Actualizar correo en la tabla Cuenta (si ha cambiado)
-        // (Misma lógica que en Usuario->actualizarMisDatos para el correo)
-        if ($this->cuenta && $this->cuenta->getCorreo() !== $nuevoCorreo) {
+        // 2. Actualizar correo en la tabla Cuenta (si ha cambiado y es válido)
+        $correoDataCambio = false;
+        if ($this->cuenta->getCorreo() !== $nuevoCorreo) {
+            $correoDataCambio = true;
+        }
+
+        if ($correoDataCambio) {
             if (empty($nuevoCorreo) || !filter_var($nuevoCorreo, FILTER_VALIDATE_EMAIL)) {
-                 $mensajeGlobal .= "El nuevo correo electrónico no es válido. ";
+                 $mensajes[] = "El nuevo correo electrónico proporcionado no es válido.";
             } else if ($cuentaDAO->verificarCorreoExistente($conexion, $nuevoCorreo, $this->cuenta->getIdCuenta())) {
-                $mensajeGlobal .= "El nuevo correo electrónico ('" . htmlspecialchars($nuevoCorreo) . "') ya está en uso por otro usuario. ";
+                $mensajes[] = "El nuevo correo electrónico ('" . htmlspecialchars($nuevoCorreo) . "') ya está en uso por otro usuario.";
             } else {
                 if ($cuentaDAO->actualizarCorreo($conexion, $this->cuenta->getIdCuenta(), $nuevoCorreo)) {
-                    $this->cuenta->setCorreo($nuevoCorreo);
-                    $correoActualizado = true;
+                    $this->cuenta->setCorreo($nuevoCorreo); // Actualiza el correo en el objeto Cuenta asociado
+                    $mensajes[] = "Correo electrónico actualizado.";
+                    $cambiosRealizados = true;
                 } else {
-                     $mensajeGlobal .= "No se pudo actualizar el correo electrónico. ";
+                     $mensajes[] = "No se pudo actualizar el correo electrónico o ya era el mismo.";
                 }
             }
         }
+        
         $conexion->cerrarConexion();
 
-        if ($datosActualizados && $correoActualizado) {
-            $mensajeGlobal = "Datos del colaborador y correo actualizados correctamente.";
-             return ['success' => true, 'message' => $mensajeGlobal];
-        } elseif ($datosActualizados) {
-            $mensajeGlobal = "Datos del colaborador actualizados. " . $mensajeGlobal;
-             return ['success' => true, 'message' => $mensajeGlobal];
-        } elseif ($correoActualizado) {
-            $mensajeGlobal = "Correo actualizado. " . $mensajeGlobal;
-             return ['success' => true, 'message' => $mensajeGlobal];
-        } elseif (empty($mensajeGlobal) && ($this->nombre === $nuevoNombre && $this->tipo_residuo === $nuevoTipoResiduo && $this->servicio_ofrecido === $nuevoServicioOfrecido && $this->cuenta && $this->cuenta->getCorreo() === $nuevoCorreo)) {
-            return ['success' => true, 'message' => "No se realizaron cambios."];
+        if (!$colaboradorDataCambio && !$correoDataCambio) {
+            return ['success' => true, 'message' => "No se detectaron cambios para actualizar."];
+        }
+
+        if ($cambiosRealizados) {
+             // Si al menos una operación fue exitosa y resultó en un cambio.
+            return ['success' => true, 'message' => implode(" ", $mensajes)];
         } else {
-            if(empty($mensajeGlobal)) $mensajeGlobal = "No se pudo actualizar la información o no hubo cambios detectados.";
-            return ['success' => false, 'message' => $mensajeGlobal];
+            // Si no se realizó ningún cambio efectivo o todas las operaciones que intentaron cambios fallaron.
+            if (empty($mensajes)) $mensajes[] = "No se pudo actualizar la información o no hubo cambios efectivos.";
+            return ['success' => false, 'message' => implode(" ", $mensajes)];
         }
     }
 
@@ -121,7 +137,7 @@ class Colaborador{
     public function setTipoResiduo($tipo_residuo) { $this->tipo_residuo = $tipo_residuo; }
     public function getServicioOfrecido() { return $this->servicio_ofrecido; }
     public function setServicioOfrecido($servicio_ofrecido) { $this->servicio_ofrecido = $servicio_ofrecido; }
-    public function getCuenta() { return $this->cuenta; } // Devuelve el objeto Cuenta
-    public function setCuenta(Cuenta $cuenta) { $this->cuenta = $cuenta; } // Acepta un objeto Cuenta
+    public function getCuenta() { return $this->cuenta; }
+    public function setCuenta(Cuenta $cuenta) { $this->cuenta = $cuenta; }
 }
 ?>
