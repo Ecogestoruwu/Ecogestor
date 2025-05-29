@@ -18,15 +18,15 @@
                     <div class="row mb-4">
                         <div class="col">
                             <!-- Simple link -->
-                            <a href="/PuntosReciclaje/index.php">inicioSesion</a>
+                            <a href="/puntos-reciclaje/index.php">inicioSesion</a>
                         </div>
                         <div class="col">
                             <!-- Simple link -->
-                            <a href="/PuntosReciclaje/vista/Usuario/registroCuenta/registrarse.php">Registrarme como usuario</a>
+                            <a href="/puntos-reciclaje/vista/Usuario/registroCuenta/registrarse.php">Registrarme como usuario</a>
                         </div>
                         <div class="col">
                             <!-- Simple link -->
-                            <a href="/PuntosReciclaje/vista/Colaborador/registroCuenta.php">Registrarme como colaborador</a>
+                            <a href="/puntos-reciclaje/vista/Colaborador/registroCuenta.php">Registrarme como colaborador</a>
                         </div>
                     </div>
 

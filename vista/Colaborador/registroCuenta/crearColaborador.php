@@ -7,6 +7,6 @@ if (isset($_POST["registrar"])) {
     $idCuenta = $cuenta  -> registrar($_POST["correo"],$_POST["clave"],2);
     $colaborador -> registrar($_POST["nombre"],$_POST["tipo_residuo"], $_POST["servicio_ofrecido"],$idCuenta);
 
-    header("Location: /PuntosReciclaje/index.php");
+    header("Location: /puntos-reciclaje/index.php");
 }
 ?>

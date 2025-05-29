@@ -5,7 +5,7 @@ if (isset($_GET["cerrarSesion"])||!isset($_SESSION["usuario"])) {
     $_SESSION = [];
     session_destroy();
 
-    header("Location: /PuntosReciclaje/index.php");
+    header("Location: /puntos-reciclaje/index.php");
 }
 $usuario = $_SESSION["usuario"];
 ?>
