@@ -7,8 +7,8 @@ class Cuenta{
     private $correo;
     // private $clave; // No almacenar la clave (ni siquiera codificada) en el objeto si no es necesario
     private $rol;
-
-    public function __construct($idCuenta=0, $correo="", $clave="", $rol=0){
+    private $estado;
+    public function __construct($idCuenta=0, $correo="", $rol=0){
         $this->idCuenta = $idCuenta;
         $this->correo = $correo;
         $this->rol = $rol;
@@ -60,23 +60,12 @@ class Cuenta{
         // Codifica la clave ingresada para compararla
         $encoded_clave_ingresada = base64_encode($clave_ingresada);
 
-        // Para depuración (eliminar en producción)
-        /*
-        if (session_status() == PHP_SESSION_NONE) { session_start(); }
-        $_SESSION['debug_auth_base64'] = [
-            "Correo Buscado: " . htmlspecialchars($correo),
-            "Clave Ingresada (Plana): " . htmlspecialchars($clave_ingresada),
-            "Clave Ingresada (Codificada): " . htmlspecialchars($encoded_clave_ingresada),
-            "Clave Almacenada (Codificada desde BD): " . htmlspecialchars($encoded_clave_almacenada),
-            "Coinciden?: " . ($encoded_clave_ingresada === $encoded_clave_almacenada ? 'SI' : 'NO')
-        ];
-        */
-
         if ($encoded_clave_ingresada === $encoded_clave_almacenada) {
             // Contraseñas codificadas coinciden
             $this->idCuenta = $cuentaData['idCuenta'];
             $this->correo = $cuentaData['correo'];
             $this->rol = $cuentaData['rol'];
+            $this->estado = $cuentaData['estado'];
             return true;
         } else {
             // Contraseñas codificadas NO coinciden
@@ -84,7 +73,14 @@ class Cuenta{
             return false;
         }
     }
-
+    public function activar($correo){
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $cuentaDAO = new CuentaDAO();
+        $success = $cuentaDAO->activar($conexion,$correo);
+        $conexion->cerrarConexion();
+        return $success;
+    }
     /**
      * Cambia la contraseña, CODIFICÁNDOLA con base64.
      * ADVERTENCIA: ESTO NO ES SEGURO.
@@ -107,5 +103,7 @@ class Cuenta{
     public function setCorreo($correo){ $this->correo = $correo; }
     public function getRol(){ return $this->rol; }
     public function setRol($rol){ $this->rol = $rol; }
+    public function getEstado(){ return $this->estado; }
+    public function setEstado($estado){ $this->estado = $estado; }
 }
 ?>

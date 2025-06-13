@@ -14,7 +14,19 @@ if (isset($_POST["registrar"])) {
         header("Location: registrarse.php"); 
         exit();
     }
-
+    if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/', $_POST["clave"])) {
+        $_SESSION['message_type'] = 'danger';
+        $_SESSION['message'] = 'la contraseña debe tener mínimo 5 caracteres, al menos 1 letra y 1 número.';
+        // Redirect back to registration form
+        header("Location: registrarse.php"); 
+        exit();
+    }
+    if ($_POST["clave"] !== $_POST["confirm_clave"]) {
+        $_SESSION['message_type'] = 'danger';
+        $_SESSION['message'] = 'Las contraseñas no coinciden.';
+        header("Location: registrarse.php"); // Redirect back to the form view page
+        exit();
+    }
     $cuenta = new Cuenta();
     $usuario = new Usuario();
     // registrar now returns ID or false
@@ -26,8 +38,9 @@ if (isset($_POST["registrar"])) {
         $usuarioRegistrado = $usuario->registrar($_POST["nombre"], $_POST["apellido"], $idCuenta);
         if ($usuarioRegistrado) {
             $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = '¡Usuario registrado exitosamente! Ahora puedes iniciar sesión.';
-            header("Location: /puntos-reciclaje/index.php");
+            $_SESSION['message'] = '¡Usuario registrado exitosamente! Ahora tienes que activar cuenta.';
+            $_SESSION["correo"] = $_POST["correo"];
+            header("Location: /puntos-reciclaje/vista/estadoCuenta/activarCuenta.php");
             exit();
         } else {
             // Potentially delete the created Cuenta if Usuario registration fails (more advanced)

@@ -18,13 +18,20 @@ if (isset($_POST["cambioClave"])) { //
         exit();
     }
 
+    if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/', $clave)) {
+        $_SESSION['message_type'] = 'danger';
+        $_SESSION['message'] = 'la contraseña debe tener mínimo 5 caracteres, al menos 1 letra y 1 número.';
+        // Redirect back to registration form
+        header("Location: cambioClave.php"); 
+        exit();
+    }
+
     if ($clave !== $confirm_clave) {
         $_SESSION['message_type'] = 'danger';
         $_SESSION['message'] = 'Las contraseñas no coinciden.';
         header("Location: cambioClave.php"); // Redirect back to the form view page
         exit();
     }
-
     // Consider adding more validation for password strength if desired
 
     $cuenta = new Cuenta();

@@ -8,6 +8,7 @@ if (isset($_GET["cerrarSesion"])||!isset($_SESSION["usuario"])) {
     header("Location: /puntos-reciclaje/index.php");
 }
 $usuario = $_SESSION["usuario"];
+$cuenta = $_SESSION["cuenta"];
 ?>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -43,7 +44,7 @@ $usuario = $_SESSION["usuario"];
                         <?php echo $usuario->getNombre() . " " . $usuario->getApellido(); ?>
                     </a>
                     <ul class="dropdown-menu">
-
+                        <li> <?php echo $cuenta -> getCorreo(); ?></li>    
                         <li><a class='dropdown-item'
                                 href='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?cerrarSesion=true'>Cerrar
                                 Sesion</a></li>

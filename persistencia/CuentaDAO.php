@@ -65,7 +65,7 @@ class CuentaDAO{
      * @return array|null Account data as an associative array or null if not found/error.
      */
     public function consultarPorCorreo(Conexion $conexion, $correo){
-        $sql = "SELECT idCuenta, correo, clave, rol FROM Cuenta WHERE correo = ?";
+        $sql = "SELECT idCuenta, correo, clave, rol, estado FROM Cuenta WHERE correo = ?";
         $stmt = $conexion->prepararConsulta($sql);
         if (!$stmt) return null;
 
@@ -83,7 +83,28 @@ class CuentaDAO{
         $stmt->close();
         return null;
     }
-    
+    /**
+     * Updates the password for a given email.
+     * @param Conexion $conexion The database connection object.
+     * @param string $correo The email of the account to update.
+     * @return bool True on success, false on failure.
+     */
+    public function activar(Conexion $conexion, $correo){
+        $sql = "UPDATE Cuenta SET estado = ? WHERE correo = ?";
+        $stmt = $conexion->prepararConsulta($sql);
+        if (!$stmt) return false;
+
+        $estado = 1;
+        $stmt->bind_param("is", $estado,$correo);
+        $success = $stmt->execute();
+        if (!$success) {
+            error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
+        }
+        // Check if any row was actually updated
+        $affected_rows = $stmt->affected_rows;
+        $stmt->close();
+        return $success && ($affected_rows > 0);
+    }
     /**
      * Updates the password for a given email.
      * @param Conexion $conexion The database connection object.
