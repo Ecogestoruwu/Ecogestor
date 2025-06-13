@@ -79,7 +79,7 @@ class Usuario{
         // 2. Actualizar correo en la tabla Cuenta (si ha cambiado)
         if ($this->cuenta && $this->cuenta->getCorreo() !== $nuevoCorreo) {
             if (empty($nuevoCorreo) || !filter_var($nuevoCorreo, FILTER_VALIDATE_EMAIL)) {
-                 $mensajeGlobal .= "El nuevo correo electrónico no es válido. ";
+                $mensajeGlobal .= "El nuevo correo electrónico no es válido. ";
             } else if ($cuentaDAO->verificarCorreoExistente($conexion, $nuevoCorreo, $this->cuenta->getIdCuenta())) {
                 $mensajeGlobal .= "El nuevo correo electrónico ('" . htmlspecialchars($nuevoCorreo) . "') ya está en uso por otro usuario. ";
             } else {
@@ -99,10 +99,10 @@ class Usuario{
             return ['success' => true, 'message' => $mensajeGlobal];
         } elseif ($datosActualizados) {
             $mensajeGlobal = "Nombre y apellido actualizados. " . $mensajeGlobal; // Añade mensajes de error de correo si los hubo
-             return ['success' => true, 'message' => $mensajeGlobal];
+            return ['success' => true, 'message' => $mensajeGlobal];
         } elseif ($correoActualizado) {
             $mensajeGlobal = "Correo actualizado. " . $mensajeGlobal; // Añade mensajes de error de nombre/apellido si los hubo
-             return ['success' => true, 'message' => $mensajeGlobal];
+            return ['success' => true, 'message' => $mensajeGlobal];
         } elseif (empty($mensajeGlobal) && ($this->nombre === $nuevoNombre && $this->apellido === $nuevoApellido && $this->cuenta && $this->cuenta->getCorreo() === $nuevoCorreo) ) {
             // No hubo cambios y no hubo errores
             return ['success' => true, 'message' => "No se realizaron cambios."];

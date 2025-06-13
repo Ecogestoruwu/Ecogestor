@@ -23,7 +23,12 @@ if (isset($_POST["inicioSesion"])) {
         header("Location: /puntos-reciclaje/index.php"); // Vuelve al login
         exit();
     }
-    
+    if($cuenta->getEstado()==0){
+        $_SESSION["correo"] = $_POST["correo"];
+        header("Location: /puntos-reciclaje/vista/estadoCuenta/activarCuenta.php");
+        exit();
+    }
+    $_SESSION["cuenta"] = $cuenta;
     // Session already started, $_SESSION["usuario"] or $_SESSION["colaborador"] will be set
     if($cuenta->getRol()==1){
         $usuario = new Usuario();

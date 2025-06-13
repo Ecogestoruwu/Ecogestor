@@ -24,8 +24,8 @@
                 <input type="email" id="userCorreo" name="correo" class="form-control" placeholder="tu@correo.com" required />
             </div>
             <div class="mb-3">
-                <label class="form-label" for="userClave">Contraseña</label>
-                <input type="password" id="userClave" name="clave" class="form-control" placeholder="Crea una contraseña" required />
+                <label class="form-label" for="userClave">Contraseña.</label>
+                <input type="password" id="userClave" name="clave" class="form-control" placeholder="mínimo 5 caracteres, al menos 1 letra y 1 número." required />
             </div>
             <div class="mb-3">
                 <label class="form-label" for="userConfirmClave">Confirmar Contraseña</label>

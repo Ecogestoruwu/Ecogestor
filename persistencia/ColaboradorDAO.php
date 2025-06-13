@@ -30,7 +30,7 @@ class ColaboradorDAO{
                 WHERE idCuenta = ?";
         $stmt = $conexion->prepararConsulta($sql);
         if (!$stmt) {
-             error_log("Prepare failed for ColaboradorDAO::consultarCuenta.");
+            error_log("Prepare failed for ColaboradorDAO::consultarCuenta.");
             return null;
         }
         $stmt->bind_param("i", $idCuenta);
