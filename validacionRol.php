@@ -24,8 +24,8 @@ if (isset($_POST["inicioSesion"])) {
         exit();
     }
     if($cuenta->getEstado()==0){
-        $_SESSION["correo"] = $_POST["correo"];
-        header("Location: /puntos-reciclaje/vista/estadoCuenta/activarCuenta.php");
+        $_SESSION["email_pending"] = $_POST["correo"];
+        header("Location: /puntos-reciclaje/vista/activacionCuenta/autenticarCorreo.php");
         exit();
     }
     $_SESSION["cuenta"] = $cuenta;

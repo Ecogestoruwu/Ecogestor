@@ -33,8 +33,8 @@ if (isset($_POST["registrar"])) {
         if ($colaboradorRegistrado) {
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = '¡Colaborador registrado exitosamente! Ahora tienes que activar cuenta.';
-            $_SESSION["correo"] = $_POST["correo"];
-            header("Location: /puntos-reciclaje/vista/estadoCuenta/activarCuenta.php");
+            $_SESSION["email_pending"] = $_POST["correo"];
+            header("Location: /puntos-reciclaje/vista/activacionCuenta/autenticarCorreo.php?correoU=");
             exit();
         } else {
             // Potentially delete the created Cuenta if Usuario registration fails (more advanced)
