@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once (__DIR__ . '/../../../logica/Colaborador.php');
 require_once (__DIR__ . '/../../../logica/Cuenta.php');
 if (isset($_POST["registrar"])) {
-    if (empty($_POST["correo"]) || empty($_POST["clave"]) || empty($_POST["nombre"]) || empty($_POST["tipo_residuo"]) || empty($_POST["servicio_ofrecido"])) {
+    if (empty($_POST["correo"]) || empty($_POST["clave"]) || empty($_POST["nombre"]) || empty($_POST["servicio_ofrecido"])) {
         $_SESSION['message_type'] = 'danger';
         $_SESSION['message'] = 'Todos los campos son obligatorios.';
         // Redirect back to registration form
@@ -29,12 +29,12 @@ if (isset($_POST["registrar"])) {
     $colaboradorRegistrado = new Colaborador();
     $idCuenta = $cuenta  -> registrar($_POST["correo"],$_POST["clave"],2);
     if ($idCuenta){
-        $colaboradorRegistrado -> registrar($_POST["nombre"],$_POST["tipo_residuo"], $_POST["servicio_ofrecido"],$idCuenta);
+        $colaboradorRegistrado -> registrar($_POST["nombre"], $_POST["servicio_ofrecido"],$idCuenta);
         if ($colaboradorRegistrado) {
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = '¡Colaborador registrado exitosamente! Ahora tienes que activar cuenta.';
             $_SESSION["email_pending"] = $_POST["correo"];
-            header("Location: /puntos-reciclaje/vista/activacionCuenta/autenticarCorreo.php?correoU=");
+            header("Location: /puntos-reciclaje/vista/activacionCuenta/autenticarCorreo.php");
             exit();
         } else {
             // Potentially delete the created Cuenta if Usuario registration fails (more advanced)

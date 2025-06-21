@@ -13,7 +13,6 @@ class Cuenta{
         $this->correo = $correo;
         $this->rol = $rol;
     }
-
     /**
      * Registra una nueva cuenta, CODIFICANDO la contraseña con base64.
      * ADVERTENCIA: ESTO NO ES SEGURO.
@@ -24,7 +23,7 @@ class Cuenta{
 
         // Para depuración (eliminar en producción)
         // error_log("REGISTRO (BASE64): Correo: $correo, Clave Plana: $clave, Clave Codificada: $encodedClave");
-
+        
         $conexion = new Conexion();
         $conexion->abrirConexion();
         $cuentaDAO = new CuentaDAO();

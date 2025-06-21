@@ -98,7 +98,7 @@ $colaborador = $_SESSION["colaborador"]; // Obtener el objeto Colaborador de la 
                     </div>
                     <div class="row mb-3 align-items-center">
                         <div class="col-md-4 text-md-end info-label">Tipo de Residuo Principal que Gestiona:</div>
-                        <div class="col-md-8 text-md-start info-value"><?php echo htmlspecialchars($colaborador->getTipoResiduo()); ?></div>
+                        
                     </div>
                     <div class="row mb-3 align-items-center">
                         <div class="col-md-4 text-md-end info-label">Servicio Ofrecido:</div>

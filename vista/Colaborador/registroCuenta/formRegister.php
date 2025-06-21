@@ -41,11 +41,6 @@
                     placeholder="Nombre del colaborador" required />
             </div>
             <div class="mb-3">
-                <label class="form-label" for="colabTipoResiduo">Tipo de Residuo Principal que Gestiona</label>
-                <input type="text" id="colabTipoResiduo" name="tipo_residuo" class="form-control"
-                    placeholder="Ej: Plástico, Papel, Vidrio" required />
-            </div>
-            <div class="mb-3">
                 <label class="form-label" for="colabServicio">Servicio Ofrecido</label>
                 <input type="text" id="colabServicio" name="servicio_ofrecido" class="form-control"
                     placeholder="Ej: Recolección, Centro de Acopio" required />

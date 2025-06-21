@@ -1,39 +1,21 @@
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form method="post" action="cambiarClave.php">
-                    <!-- Email input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="email" name="correo" class="form-control" />
-                        <label class="form-label">correo</label>
-                    </div>
-
-                    <!-- Password input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="password" name="clave" class="form-control" />
-                        <label class="form-label">clave</label>
-                    </div>
-
-                    <!-- 2 column grid layout for inline styling -->
-                    <div class="row mb-4">
-                        <div class="col">
-                            <!-- Simple link -->
-                            <a href="/puntos-reciclaje/index.php">inicioSesion</a>
-                        </div>
-                        <div class="col">
-                            <!-- Simple link -->
-                            <a href="/puntos-reciclaje/vista/Usuario/registroCuenta/registrarse.php">Registrarme como usuario</a>
-                        </div>
-                        <div class="col">
-                            <!-- Simple link -->
-                            <a href="/puntos-reciclaje/vista/Colaborador/registroCuenta.php">Registrarme como colaborador</a>
-                        </div>
-                    </div>
-
-                    <!-- Submit button -->
-                    <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                        class="btn btn-primary btn-block mb-4" name="cambioClave">cambiar clave</button>
-                </form>
-            </div>
-        </div>
+<form method="post" action="validarClave.php">
+    <div class="form-outline mb-4">
+        <label class="form-label" for="changeCorreo">Correo Electrónico</label>
+        <input type="email" id="changeCorreo" name="correo" class="form-control" placeholder="tu@correo.com" required />
     </div>
+
+    <div class="form-outline mb-4">
+        <label class="form-label" for="changeClave">Nueva contraseña.</label>
+        <input type="password" id="changeClave" name="clave" class="form-control"
+            placeholder="mínimo 5 caracteres, al menos 1 letra y 1 número." required />
+    </div>
+
+    <div class="form-outline mb-4">
+        <label class="form-label" for="confirmClave">Confirmar Nueva Contraseña</label>
+        <input type="password" id="confirmClave" name="confirm_clave" class="form-control"
+            placeholder="Confirma tu nueva contraseña" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block mb-4" name="cambioClave">Cambiar
+        Contraseña</button>
+</form>

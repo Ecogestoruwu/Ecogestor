@@ -5,15 +5,15 @@ class ColaboradorDAO{
         // Puede estar vacío
     }
 
-    public function registrar(Conexion $conexion, $nombre, $tipo_residuo, $servicio_ofrecido, $idCuenta){
-        $sql = "INSERT INTO Colaborador (nombre, tipo_residuo, servicio_ofrecido, idCuenta) 
-                VALUES (?, ?, ?, ?)";
+    public function registrar(Conexion $conexion, $nombre, $servicio_ofrecido, $idCuenta){
+        $sql = "INSERT INTO Colaborador (nombre, servicio_ofrecido, idCuenta) 
+                VALUES (?, ?, ?)";
         $stmt = $conexion->prepararConsulta($sql);
         if (!$stmt) {
             error_log("Prepare failed for ColaboradorDAO::registrar.");
             return false;
         }
-        $stmt->bind_param("sssi", $nombre, $tipo_residuo, $servicio_ofrecido, $idCuenta);
+        $stmt->bind_param("ssi", $nombre, $servicio_ofrecido, $idCuenta);
         if ($stmt->execute()) {
             $stmt->close();
             return true;
@@ -25,7 +25,7 @@ class ColaboradorDAO{
     }
 
     public function consultarCuenta(Conexion $conexion, $idCuenta){
-        $sql = "SELECT idColaborador, nombre, tipo_residuo, servicio_ofrecido, idCuenta
+        $sql = "SELECT idColaborador, nombre, servicio_ofrecido, idCuenta
                 FROM Colaborador
                 WHERE idCuenta = ?";
         $stmt = $conexion->prepararConsulta($sql);
@@ -52,12 +52,11 @@ class ColaboradorDAO{
      * @param Conexion $conexion
      * @param int $idColaborador El ID del colaborador a actualizar.
      * @param string $nombre Nuevo nombre.
-     * @param string $tipo_residuo Nuevo tipo de residuo.
      * @param string $servicio_ofrecido Nuevo servicio ofrecido.
      * @return bool True si la actualización fue exitosa y afectó filas, false en caso contrario.
      */
-    public function actualizar(Conexion $conexion, $idColaborador, $nombre, $tipo_residuo, $servicio_ofrecido) {
-        $sql = "UPDATE Colaborador SET nombre = ?, tipo_residuo = ?, servicio_ofrecido = ? WHERE idColaborador = ?";
+    public function actualizar(Conexion $conexion, $idColaborador, $nombre, $servicio_ofrecido) {
+        $sql = "UPDATE Colaborador SET nombre = ?, servicio_ofrecido = ? WHERE idColaborador = ?";
         $stmt = $conexion->prepararConsulta($sql);
 
         if (!$stmt) {
@@ -65,7 +64,7 @@ class ColaboradorDAO{
             return false;
         }
 
-        $stmt->bind_param("sssi", $nombre, $tipo_residuo, $servicio_ofrecido, $idColaborador);
+        $stmt->bind_param("sssi", $nombre, $servicio_ofrecido, $idColaborador);
 
         if ($stmt->execute()) {
             $affected_rows = $stmt->affected_rows;

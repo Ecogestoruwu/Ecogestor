@@ -4,7 +4,7 @@ class Conexion{
     private $mysqlConexion;
     
     public function abrirConexion(){
-        $this->mysqlConexion = new mysqli("localhost", "root", "", "puntoreciclaje",3307);
+        $this->mysqlConexion = new mysqli("localhost", "root", "", "ecogestordb",3307);
         if ($this->mysqlConexion->connect_error) {
             // Log the error or handle it more gracefully in a real application
             die("Connection failed: " . $this->mysqlConexion->connect_error);
