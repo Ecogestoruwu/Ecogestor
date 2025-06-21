@@ -58,7 +58,7 @@ class CuentaDAO{
             return false;
         }
     }
-     /**
+    /**
      * Fetches account details by email.
      * @param Conexion $conexion The database connection object.
      * @param string $correo The email to search for.
