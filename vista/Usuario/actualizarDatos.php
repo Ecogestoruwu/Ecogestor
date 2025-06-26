@@ -16,18 +16,14 @@ $tipo_mensaje = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_usuario'])) {
     $nuevo_nombre = trim($_POST['nombre']);
     $nuevo_apellido = trim($_POST['apellido']);
-    $nuevo_correo = trim($_POST['correo']);
     $nuevo_telefono = trim($_POST['telefono']);
     $nuevo_nickname = trim($_POST['nickname']);
     $foto_perfil = $usuario->getFotoPerfil(); // Valor por defecto
     $foto_subida = false;
 
     // Validaciones
-    if (empty($nuevo_nombre) || empty($nuevo_apellido) || empty($nuevo_correo) || empty($nuevo_telefono) || empty($nuevo_nickname)) {
-        $mensaje = "Todos los campos (nombre, apellido, correo, teléfono, nickname) son obligatorios.";
-        $tipo_mensaje = "danger";
-    } elseif (!filter_var($nuevo_correo, FILTER_VALIDATE_EMAIL)) {
-        $mensaje = "El formato del correo electrónico no es válido.";
+    if (empty($nuevo_nombre) || empty($nuevo_apellido) || empty($nuevo_telefono) || empty($nuevo_nickname)) {
+        $mensaje = "Todos los campos (nombre, apellido, teléfono, nickname) son obligatorios.";
         $tipo_mensaje = "danger";
     } elseif (!preg_match('/^[0-9]{7,15}$/', $nuevo_telefono)) {
         $mensaje = "El teléfono debe contener solo números (7-15 dígitos).";
@@ -75,14 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_usuario'])
                 $usuario->setTelefono($nuevo_telefono);
                 $usuario->setNickname($nuevo_nickname);
                 $usuario->setFotoPerfil($foto_perfil);
-                // Actualizar correo si cambió
-                if ($usuario->getCuenta() && $usuario->getCuenta()->getCorreo() !== $nuevo_correo) {
-                    $resultadoCorreo = $usuario->actualizarMisDatos($nuevo_nombre, $nuevo_apellido, $nuevo_correo);
-                    if (!$resultadoCorreo['success']) {
-                        $mensaje = $resultadoCorreo['message'];
-                        $tipo_mensaje = "danger";
-                    }
-                }
                 $_SESSION["usuario"] = $usuario;
                 if ($tipo_mensaje !== "danger") {
                     $mensaje = "Datos actualizados correctamente.";
@@ -131,14 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_usuario'])
                         <div class="mb-3">
                             <label for="apellido" class="form-label">Apellido:</label>
                             <input type="text" class="form-control" id="apellido" name="apellido" value="<?php echo htmlspecialchars($usuario->getApellido()); ?>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="correo" class="form-label">Correo Electrónico:</label>
-                            <input type="email" class="form-control" id="correo" name="correo" value="<?php
-                                if ($usuario->getCuenta() && method_exists($usuario->getCuenta(), 'getCorreo')) {
-                                    echo htmlspecialchars($usuario->getCuenta()->getCorreo());
-                                }
-                            ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="form-label">Teléfono:</label>

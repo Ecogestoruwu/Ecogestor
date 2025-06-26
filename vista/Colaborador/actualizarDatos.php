@@ -13,18 +13,14 @@ $tipo_mensaje_feedback = ""; // 'success', 'danger', 'info'
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_colaborador'])) {
     // Recoger datos del formulario
     $nuevo_nombre_colab = isset($_POST['nombre_colaborador']) ? trim($_POST['nombre_colaborador']) : '';
-    $nuevo_correo_colab = isset($_POST['correo_colaborador']) ? trim($_POST['correo_colaborador']) : '';
     $nuevo_telefono = isset($_POST['telefono']) ? trim($_POST['telefono']) : '';
     $nueva_direccion = isset($_POST['direccion']) ? trim($_POST['direccion']) : '';
     $nuevo_servicio_ofrecido = isset($_POST['servicio_ofrecido']) ? trim($_POST['servicio_ofrecido']) : '';
     $foto_perfil = isset($_FILES['foto_perfil']) ? $_FILES['foto_perfil'] : null;
 
     // Validaciones básicas del lado del servidor
-    if (empty($nuevo_nombre_colab) || empty($nuevo_correo_colab) || empty($nuevo_telefono) || empty($nueva_direccion) || empty($nuevo_servicio_ofrecido)) {
-        $mensaje_feedback = "Todos los campos (nombre, correo, teléfono, dirección, servicio) son obligatorios.";
-        $tipo_mensaje_feedback = "danger";
-    } elseif (!filter_var($nuevo_correo_colab, FILTER_VALIDATE_EMAIL)) {
-        $mensaje_feedback = "El formato del correo electrónico no es válido.";
+    if (empty($nuevo_nombre_colab) || empty($nuevo_telefono) || empty($nueva_direccion) || empty($nuevo_servicio_ofrecido)) {
+        $mensaje_feedback = "Todos los campos (nombre, teléfono, dirección, servicio) son obligatorios.";
         $tipo_mensaje_feedback = "danger";
     } elseif (!preg_match('/^[0-9\-\+\s]{7,20}$/', $nuevo_telefono)) {
         $mensaje_feedback = "El teléfono debe ser válido (solo números, espacios, + o -).";
@@ -147,14 +143,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_colaborado
                         <div class="mb-3">
                             <label for="nombre_colaborador" class="form-label">Nombre de Entidad/Persona:</label>
                             <input type="text" class="form-control" id="nombre_colaborador" name="nombre_colaborador" value="<?php echo htmlspecialchars($colaborador->getNombre()); ?>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="correo_colaborador" class="form-label">Correo Electrónico:</label>
-                            <input type="email" class="form-control" id="correo_colaborador" name="correo_colaborador" value="<?php
-                                if ($colaborador->getCuenta() && method_exists($colaborador->getCuenta(), 'getCorreo')) {
-                                    echo htmlspecialchars($colaborador->getCuenta()->getCorreo());
-                                } else { echo ''; /* Evitar error si no hay cuenta o método */ }
-                            ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="form-label">Teléfono de Contacto:</label>
