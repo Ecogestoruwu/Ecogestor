@@ -34,6 +34,9 @@ $cuenta = $_SESSION["cuenta"];
                     <a class="nav-link active" aria-current="page" href="#">
                         menu 3</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Colaborador/residuosColaborador.php">Residuos gestionados</a>
+                </li>
             </ul>
         </div>
         <div class="ml-auto">

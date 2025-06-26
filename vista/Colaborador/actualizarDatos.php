@@ -110,6 +110,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar_colaborado
                         </div>
                     <?php endif; ?>
 
+                    <div class="mb-4 p-3 border rounded bg-light">
+                        <h5 class="mb-3 text-primary">Datos actuales</h5>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-12 col-md-6">
+                                <strong>Nombre:</strong> <?php echo htmlspecialchars($colaborador->getNombre()); ?>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Correo:</strong> <?php
+                                    if ($colaborador->getCuenta() && method_exists($colaborador->getCuenta(), 'getCorreo')) {
+                                        echo htmlspecialchars($colaborador->getCuenta()->getCorreo());
+                                    } else { echo '-'; }
+                                ?>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Teléfono:</strong> <?php echo htmlspecialchars($colaborador->getTelefono()); ?>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Dirección:</strong> <?php echo htmlspecialchars($colaborador->getDireccion()); ?>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Servicio ofrecido:</strong> <?php echo htmlspecialchars($colaborador->getServicioOfrecido()); ?>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Foto actual:</strong><br>
+                                <?php if (!empty($colaborador->getFotoPerfil())): ?>
+                                    <img src="<?php echo htmlspecialchars($colaborador->getFotoPerfil()); ?>" alt="Foto actual" style="max-width:80px;max-height:80px;">
+                                <?php else: ?>
+                                    <span class="text-muted">No registrada</span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+
                     <form method="POST" action="actualizarDatos.php" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="nombre_colaborador" class="form-label">Nombre de Entidad/Persona:</label>

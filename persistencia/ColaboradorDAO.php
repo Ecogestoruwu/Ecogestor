@@ -89,5 +89,61 @@ class ColaboradorDAO{
         $stmt->close();
         return $result;
     }
+
+    public function obtenerResiduosColaborador($conexion, $idColaborador) {
+        $sql = "SELECT Residuo_idResiduo FROM colaborador_has_residuo WHERE Colaborador_idColaborador = ?";
+        $stmt = $conexion->prepararConsulta($sql);
+        $ids = [];
+        if ($stmt) {
+            $stmt->bind_param("i", $idColaborador);
+            if ($stmt->execute()) {
+                $res = $stmt->get_result();
+                while ($row = $res->fetch_assoc()) {
+                    $ids[] = $row['Residuo_idResiduo'];
+                }
+            }
+            $stmt->close();
+        }
+        return $ids;
+    }
+
+    public function obtenerObservacionesResiduos($conexion, $idColaborador) {
+        $sql = "SELECT observaciones FROM colaborador_has_residuo WHERE Colaborador_idColaborador = ? LIMIT 1";
+        $stmt = $conexion->prepararConsulta($sql);
+        $observaciones = '';
+        if ($stmt) {
+            $stmt->bind_param("i", $idColaborador);
+            if ($stmt->execute()) {
+                $res = $stmt->get_result();
+                if ($row = $res->fetch_assoc()) {
+                    $observaciones = $row['observaciones'];
+                }
+            }
+            $stmt->close();
+        }
+        return $observaciones;
+    }
+
+    public function actualizarResiduosColaborador($conexion, $idColaborador, $residuos, $observaciones) {
+        // Eliminar los residuos actuales
+        $sqlDel = "DELETE FROM colaborador_has_residuo WHERE Colaborador_idColaborador = ?";
+        $stmtDel = $conexion->prepararConsulta($sqlDel);
+        if ($stmtDel) {
+            $stmtDel->bind_param("i", $idColaborador);
+            $stmtDel->execute();
+            $stmtDel->close();
+        }
+        // Insertar los nuevos residuos
+        $sqlIns = "INSERT INTO colaborador_has_residuo (Colaborador_idColaborador, Residuo_idResiduo, observaciones) VALUES (?, ?, ?)";
+        foreach ($residuos as $idResiduo) {
+            $stmtIns = $conexion->prepararConsulta($sqlIns);
+            if ($stmtIns) {
+                $stmtIns->bind_param("iis", $idColaborador, $idResiduo, $observaciones);
+                $stmtIns->execute();
+                $stmtIns->close();
+            }
+        }
+        return true;
+    }
 }
 ?>
