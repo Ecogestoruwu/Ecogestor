@@ -76,5 +76,18 @@ class ColaboradorDAO{
             return false;
         }
     }
+
+    public function actualizarDatosCompletos(Conexion $conexion, $idColaborador, $nombre, $telefono, $direccion, $servicio_ofrecido, $foto_perfil) {
+        $sql = "UPDATE Colaborador SET nombre = ?, telefono = ?, direccion = ?, servicio_ofrecido = ?, foto_perfil = ? WHERE idColaborador = ?";
+        $stmt = $conexion->prepararConsulta($sql);
+        if (!$stmt) {
+            error_log("Prepare failed for ColaboradorDAO::actualizarDatosCompletos: Error en SQL o conexión.");
+            return false;
+        }
+        $stmt->bind_param("sssssi", $nombre, $telefono, $direccion, $servicio_ofrecido, $foto_perfil, $idColaborador);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
 }
 ?>

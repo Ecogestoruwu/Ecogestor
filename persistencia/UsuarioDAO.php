@@ -67,5 +67,29 @@ class UsuarioDAO{
             return false;
         }
     }
+
+    /**
+     * Actualiza todos los datos de un usuario en la tabla Usuario.
+     * @param Conexion $conexion
+     * @param int $idUsuario El ID del usuario a actualizar.
+     * @param string $nombre Nuevo nombre.
+     * @param string $apellido Nuevo apellido.
+     * @param string $telefono Nuevo teléfono.
+     * @param string $nickname Nuevo nickname.
+     * @param string $foto_perfil Nueva foto de perfil.
+     * @return bool True si la actualización fue exitosa y afectó filas, false en caso contrario.
+     */
+    public function actualizarDatosCompletos(Conexion $conexion, $idUsuario, $nombre, $apellido, $telefono, $nickname, $foto_perfil) {
+        $sql = "UPDATE Usuario SET nombre = ?, apellido = ?, telefono = ?, nickname = ?, foto_perfil = ? WHERE idUsuario = ?";
+        $stmt = $conexion->prepararConsulta($sql);
+        if (!$stmt) {
+            error_log("Prepare failed for UsuarioDAO::actualizarDatosCompletos: Error en SQL o conexión.");
+            return false;
+        }
+        $stmt->bind_param("sssssi", $nombre, $apellido, $telefono, $nickname, $foto_perfil, $idUsuario);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
 }
 ?>

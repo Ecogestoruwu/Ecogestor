@@ -9,6 +9,13 @@ if (!isset($_SESSION["colaborador"])) {
     exit();
 }
 $colaborador = $_SESSION["colaborador"]; // Obtener el objeto Colaborador de la sesión
+
+// Verificar si faltan datos obligatorios
+$faltanDatos = empty($colaborador->getTelefono()) || empty($colaborador->getDireccion()) || empty($colaborador->getFotoPerfil());
+if ($faltanDatos) {
+    header("Location: actualizarDatos.php?completar=1");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">

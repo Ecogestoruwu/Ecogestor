@@ -9,12 +9,18 @@ class Usuario{
     private $nombre;
     private $apellido;
     private $cuenta; // Objeto Cuenta
+    private $telefono;
+    private $nickname;
+    private $foto_perfil;
 
-    public function __construct($idUsuario=0, $nombre="", $apellido="", $cuenta=null){
+    public function __construct($idUsuario=0, $nombre="", $apellido="", $cuenta=null, $telefono="", $nickname="", $foto_perfil=""){
         $this->idUsuario = $idUsuario;
         $this->nombre = $nombre;
         $this->apellido = $apellido;
-        $this->cuenta = $cuenta; // Debe ser un objeto Cuenta
+        $this->cuenta = $cuenta;
+        $this->telefono = $telefono;
+        $this->nickname = $nickname;
+        $this->foto_perfil = $foto_perfil;
     }
 
     public function registrar($nombre, $apellido, $idCuenta){
@@ -121,5 +127,11 @@ class Usuario{
     public function setApellido($apellido){ $this->apellido = $apellido; }
     public function getCuenta(){ return $this->cuenta; } // Devuelve el objeto Cuenta
     public function setCuenta(Cuenta $cuenta){ $this->cuenta = $cuenta; } // Acepta un objeto Cuenta
+    public function getTelefono() { return $this->telefono; }
+    public function setTelefono($telefono) { $this->telefono = $telefono; }
+    public function getNickname() { return $this->nickname; }
+    public function setNickname($nickname) { $this->nickname = $nickname; }
+    public function getFotoPerfil() { return $this->foto_perfil; }
+    public function setFotoPerfil($foto_perfil) { $this->foto_perfil = $foto_perfil; }
 }
 ?>

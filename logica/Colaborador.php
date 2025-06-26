@@ -9,12 +9,18 @@ class Colaborador{
     private $nombre;
     private $servicio_ofrecido;
     private $cuenta; // Debe ser un objeto Cuenta
+    private $telefono;
+    private $direccion;
+    private $foto_perfil;
 
-    public function __construct($idColaborador = 0, $nombre = "", $servicio_ofrecido = "", $cuenta = null){
+    public function __construct($idColaborador = 0, $nombre = "", $servicio_ofrecido = "", $cuenta = null, $telefono = "", $direccion = "", $foto_perfil = ""){
         $this->idColaborador = $idColaborador;
         $this->nombre = $nombre;
         $this->servicio_ofrecido = $servicio_ofrecido;
         $this->cuenta = $cuenta;
+        $this->telefono = $telefono;
+        $this->direccion = $direccion;
+        $this->foto_perfil = $foto_perfil;
     }
 
     public function registrar($nombre, $servicio_ofrecido, $idCuenta){
@@ -132,5 +138,11 @@ class Colaborador{
     public function setServicioOfrecido($servicio_ofrecido) { $this->servicio_ofrecido = $servicio_ofrecido; }
     public function getCuenta() { return $this->cuenta; }
     public function setCuenta(Cuenta $cuenta) { $this->cuenta = $cuenta; }
+    public function getTelefono() { return $this->telefono; }
+    public function setTelefono($telefono) { $this->telefono = $telefono; }
+    public function getDireccion() { return $this->direccion; }
+    public function setDireccion($direccion) { $this->direccion = $direccion; }
+    public function getFotoPerfil() { return $this->foto_perfil; }
+    public function setFotoPerfil($foto_perfil) { $this->foto_perfil = $foto_perfil; }
 }
 ?>
