@@ -1,7 +1,6 @@
 <?php
 require_once (__DIR__ . '/../persistencia/Conexion.php');
 require_once(__DIR__ . '/../persistencia/UsuarioDAO.php');
-require_once(__DIR__ . '/../persistencia/CuentaDAO.php'); // Necesario para actualizar correo
 require_once (__DIR__ . '/Cuenta.php');
 
 class Usuario{
@@ -22,7 +21,21 @@ class Usuario{
         $this->nickname = $nickname;
         $this->foto_perfil = $foto_perfil;
     }
-
+    public function mapearPorId(){
+        $usuarios = [];
+        $cuenta = new Cuenta();
+        $cuentas = $cuenta -> mapearPorId();
+        $conexion = new Conexion();
+        $conexion -> abrirConexion();
+        $usuarioDAO = new UsuarioDAO();
+        $conexion -> ejecutarConsulta($usuarioDAO -> consultarTodos());
+        while($registro = $conexion -> siguienteRegistro()){            
+            $usuario = new Usuario($registro[0], $registro[1],$registro[2],$registro[3],$registro[4],$registro[5],$cuentas[$registro[6]]);
+            $usuarios[$registro[0]] = $usuario;
+        }
+        $conexion -> cerrarConexion();
+        return $usuarios;   
+    }
     public function registrar($nombre, $apellido, $idCuenta){
         $conexion = new Conexion();
         $conexion->abrirConexion();

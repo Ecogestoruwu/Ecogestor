@@ -5,6 +5,15 @@ class CuentaDAO{
         // Constructor can be empty if DAO is stateless
     }
 
+    public function consultarTodos() {
+        return "SELECT 
+            idCuenta,
+            correo,
+            clave,
+            rol,
+            estado
+        FROM Cuenta;";
+    }
     // ... (consultarPorCorreo, cambiarClave, registrar ya existen y están bien) ...
 
     /**

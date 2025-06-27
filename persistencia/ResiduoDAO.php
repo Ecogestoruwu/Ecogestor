@@ -1,5 +1,8 @@
 <?php
 class ResiduoDAO {
+    public function consultarTodos() {
+        return "SELECT * FROM Residuo;";
+    }
     public function listarTodos($conexion) {
         $sql = "SELECT idResiduo, nombre, descripcion, categoria FROM residuo ORDER BY nombre ASC";
         $stmt = $conexion->prepararConsulta($sql);

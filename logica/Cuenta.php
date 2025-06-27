@@ -13,6 +13,21 @@ class Cuenta{
         $this->correo = $correo;
         $this->rol = $rol;
     }
+    public function mapearPorId(){
+        $cuentas = [];
+        
+        $conexion = new Conexion();
+        $conexion -> abrirConexion();
+        $cuentaDAO = new CuentaDAO();
+        $conexion -> ejecutarConsulta($cuentaDAO -> consultarTodos());
+        
+        while($registro = $conexion -> siguienteRegistro()){            
+            $cuenta = new Cuenta($registro[0], $registro[1],$registro[2]);
+            $cuentas[$registro[0]] = $cuenta;
+        }
+        $conexion -> cerrarConexion();
+        return $cuentas;   
+    }
     /**
      * Registra una nueva cuenta, CODIFICANDO la contraseña con base64.
      * ADVERTENCIA: ESTO NO ES SEGURO.

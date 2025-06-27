@@ -2,7 +2,7 @@
 
 class Conexion{
     private $mysqlConexion;
-    
+    private $resultado;
     public function abrirConexion(){
         $this->mysqlConexion = new mysqli("localhost", "root", "", "ecogestordb",3307);
         if ($this->mysqlConexion->connect_error) {
@@ -25,6 +25,9 @@ class Conexion{
         return $resultado; // Returns mysqli_result object or true/false for DML
     }
 
+    public function ejecutarConsulta($sentenciaSQL){
+        $this -> resultado = $this -> mysqlConexion -> query($sentenciaSQL);
+    }
     /**
      * Prepares an SQL statement for execution.
      * @param string $sentenciaSQL The SQL query with placeholders (?).
@@ -39,11 +42,15 @@ class Conexion{
         }
         return $stmt;
     }
-        
+    public function numeroFilas(){
+        return $this -> resultado -> num_rows;
+    }
     public function obtenerLlaveAutonumerica(){
         return $this->mysqlConexion->insert_id;
     }
-    
+    public function siguienteRegistro(){
+        return $this -> resultado -> fetch_row();
+    }
     public function cerrarConexion(){
         if ($this->mysqlConexion) {
             $this->mysqlConexion->close();
