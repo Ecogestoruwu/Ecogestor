@@ -1,8 +1,25 @@
 <?php
-// Ensure session is started to display potential messages
+// Asegurarse de que la sesión esté iniciada para mostrar mensajes potenciales
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+// Guardar mensajes antes de destruir la sesión
+$mensaje = isset($_SESSION['message']) ? $_SESSION['message'] : null;
+$mensaje_tipo = isset($_SESSION['message_type']) ? $_SESSION['message_type'] : null;
+// Destruir cualquier sesión activa al cargar el login
+session_unset();
+session_destroy();
+// Restaurar mensajes en la nueva sesión
+if ($mensaje) {
+    session_start();
+    $_SESSION['message'] = $mensaje;
+    $_SESSION['message_type'] = $mensaje_tipo;
+}
+
+// Cabeceras anti-caché para evitar acceso tras logout o retroceso
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -14,7 +31,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <title>Iniciar Sesión - Puntos de Reciclaje</title>
     <style>
         body {
-            background-color: #f8f9fa; /* Light gray background */
+            background-color: #f8f9fa; /* Fondo gris claro */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,22 +39,22 @@ if (session_status() == PHP_SESSION_NONE) {
             margin: 0;
         }
         .login-card {
-            max-width: 450px; /* Increased width slightly */
+            max-width: 450px; /* Ancho ligeramente aumentado */
             width: 100%;
             padding: 2rem;
             border: none;
-            border-radius: 0.75rem; /* Softer corners */
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Softer shadow */
+            border-radius: 0.75rem; /* Esquinas más suaves */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Sombra más suave */
         }
         .logo-placeholder {
-            /* You can style a logo area here if you have one */
+            /* Estilo para el área del logo si se tiene uno */
             text-align: center;
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
             font-weight: bold;
-            color: #0d6efd; /* Bootstrap primary blue */
+            color: #0d6efd; /* Azul primario de Bootstrap */
         }
-        /* Optional: Style for form labels to be slightly smaller and gray */
+        /* Opcional: Estilo para etiquetas de formulario, ligeramente más pequeñas y en gris */
         .form-label {
             font-size: 0.875rem;
             color: #6c757d;
@@ -49,7 +66,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5"> 
                 <?php
-                // This includes the loginForm.php content
+                // Esto incluye el contenido de loginForm.php
                 include (__DIR__ . '/loginForm.php');
                 ?>
             </div>

@@ -122,10 +122,9 @@ class CuentaDAO{
         if (!$success) {
             error_log("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
         }
-        // Check if any row was actually updated
-        $affected_rows = $stmt->affected_rows;
+        // Considera éxito aunque la contraseña sea igual (no importa affected_rows)
         $stmt->close();
-        return $success && ($affected_rows > 0);
+        return $success;
     }
 
     /**

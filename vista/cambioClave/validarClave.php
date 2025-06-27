@@ -3,41 +3,37 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once(__DIR__ . '/../../logica/Cuenta.php'); //
+require_once(__DIR__ . '/../../logica/Cuenta.php');
 
-if (isset($_POST["cambioClave"])) { //
+if (isset($_POST["cambioClave"])) {
     $correo = $_POST["correo"];
-    $clave = $_POST["clave"];
-    $confirm_clave = $_POST["confirm_clave"]; // From the new confirmation field
 
-    // Basic Validations
-    if (empty($correo) || empty($clave) || empty($confirm_clave)) {
+    // Validación básica: solo correo
+    if (empty($correo)) {
         $_SESSION['message_type'] = 'danger';
-        $_SESSION['message'] = 'Todos los campos son obligatorios.';
-        header("Location: cambioClave.php"); // Redirect back to the form view page
+        $_SESSION['message'] = 'El campo correo es obligatorio.';
+        header("Location: cambioClave.php");
         exit();
     }
 
-    if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/', $clave)) {
+    // Validar que el correo exista en la base de datos
+    $cuenta = new Cuenta();
+    $conexion = new Conexion();
+    $conexion->abrirConexion();
+    $cuentaDAO = new CuentaDAO();
+    $cuentaData = $cuentaDAO->consultarPorCorreo($conexion, $correo);
+    $conexion->cerrarConexion();
+    if (!$cuentaData) {
         $_SESSION['message_type'] = 'danger';
-        $_SESSION['message'] = 'la contraseña debe tener mínimo 5 caracteres, al menos 1 letra y 1 número.';
-        // Redirect back to registration form
-        header("Location: cambioClave.php"); 
+        $_SESSION['message'] = 'El correo ingresado no está registrado.';
+        header("Location: cambioClave.php");
         exit();
     }
-
-    if ($clave !== $confirm_clave) {
-        $_SESSION['message_type'] = 'danger';
-        $_SESSION['message'] = 'Las contraseñas no coinciden.';
-        header("Location: cambioClave.php"); // Redirect back to the form view page
-        exit();
-    }
-    // Consider adding more validation for password strength if desired
-    $_SESSION["email_pending"] = $_POST["correo"];
-    $_SESSION["clave_pending"] = $_POST["clave"];
+    // Guardar correo en sesión y redirigir a autenticarCorreo.php para enviar el correo
+    $_SESSION["email_pending"] = $correo;
     header("Location: /puntos-reciclaje/vista/cambioClave/autenticarCorreo.php");
+    exit();
 } else {
-    // If accessed directly without POST, redirect to form or home
     header("Location: cambioClave.php");
     exit();
 }

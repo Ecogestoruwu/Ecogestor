@@ -1,11 +1,15 @@
 <?php
 require_once(__DIR__ . '/../../logica/Usuario.php');
 session_start();
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 if (isset($_GET["cerrarSesion"])||!isset($_SESSION["usuario"])) {
     $_SESSION = [];
     session_destroy();
 
     header("Location: /puntos-reciclaje/index.php");
+    exit();
 }
 $usuario = $_SESSION["usuario"];
 $cuenta = $_SESSION["cuenta"];
@@ -13,7 +17,7 @@ $cuenta = $_SESSION["cuenta"];
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="/puntos-reciclaje/vista/Usuario/indexUsuario.php">
             <img src="/assets/images/logo.webp" style="width: 30px; height: 30px;" alt="Logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -23,34 +27,18 @@ $cuenta = $_SESSION["cuenta"];
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">
-                        menu 1</a>
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/actualizarDatos.php">Actualizar mis datos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">
-                        menu 2</a>
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/indexUsuario.php">Ver puntos de reciclaje</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">
-                        menu 3</a>
+                    <a class="nav-link" href="/puntos-reciclaje/index.php?cerrarSesion=1">Cerrar sesión</a>
                 </li>
             </ul>
-        </div>
-        <div class="ml-auto">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <?php echo $usuario->getNombre() . " " . $usuario->getApellido(); ?>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li> <?php echo $cuenta -> getCorreo(); ?></li>    
-                        <li><a class='dropdown-item'
-                                href='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?cerrarSesion=true'>Cerrar
-                                Sesion</a></li>
-                    </ul>
-                </li>
-            </ul>
+            <span class="navbar-text">
+                <?php echo htmlspecialchars($usuario->getNombre()); ?>
+            </span>
         </div>
     </div>
 </nav>

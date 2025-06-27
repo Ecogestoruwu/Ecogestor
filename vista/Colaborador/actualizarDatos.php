@@ -1,4 +1,11 @@
 <?php
+require_once(__DIR__ . '/../../logica/Colaborador.php');
+require_once(__DIR__ . '/../../logica/Cuenta.php');
+// Cabeceras anti-caché para evitar acceso tras logout o retroceso
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
 require_once(__DIR__ . '/navbarColaborador.php'); // Asegura la sesión y el objeto $colaborador
 
 if (!isset($_SESSION["colaborador"])) {

@@ -24,26 +24,24 @@ if (isset($_POST["inicioSesion"])) {
         exit();
     }
     if($cuenta->getEstado()==0){
-        $_SESSION["email_pending"] = $_POST["correo"];
-        header("Location: /puntos-reciclaje/vista/activacionCuenta/autenticarCorreo.php");
+        $_SESSION['message_type'] = 'warning';
+        $_SESSION['message'] = 'Tu cuenta aún no ha sido activada. Por favor revisa tu correo electrónico y sigue el enlace de activación antes de iniciar sesión.';
+        header("Location: /puntos-reciclaje/index.php");
         exit();
     }
     $_SESSION["cuenta"] = $cuenta;
     // Session already started, $_SESSION["usuario"] or $_SESSION["colaborador"] will be set
     if($cuenta->getRol()==1){
         $usuario = new Usuario();
-        // consultarCuenta will need to be adapted to the new DAO return types (assoc array)
-        // and to accept the $cuenta object to get its ID.
-		$usuario->consultarCuenta($cuenta); // Pass the authenticated $cuenta object
-        $_SESSION["usuario"] = $usuario; // Storing the object is fine
-        header("Location: /puntos-reciclaje/vista/Usuario/indexUsuario.php");
+        $usuario->consultarCuenta($cuenta);
+        $_SESSION["usuario"] = $usuario;
+        header("Location: /puntos-reciclaje/vista/Usuario/actualizarDatos.php");
         exit();
     }else{
         $colaborador = new Colaborador();
-        // Similar adaptation for $colaborador->consultarCuenta($cuenta)
         $colaborador->consultarCuenta($cuenta);
         $_SESSION["colaborador"] = $colaborador;
-        header("Location: /puntos-reciclaje/vista/Colaborador/indexColaborador.php");
+        header("Location: /puntos-reciclaje/vista/Colaborador/actualizarDatos.php");
         exit();
     }
 }
