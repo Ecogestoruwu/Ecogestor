@@ -12,7 +12,7 @@ class Usuario{
     private $nickname;
     private $foto_perfil;
 
-    public function __construct($idUsuario=0, $nombre="", $apellido="", $cuenta=null, $telefono="", $nickname="", $foto_perfil=""){
+    public function __construct($idUsuario=0, $nombre="", $apellido="", $telefono="", $nickname="", $foto_perfil="",$cuenta=null){
         $this->idUsuario = $idUsuario;
         $this->nombre = $nombre;
         $this->apellido = $apellido;

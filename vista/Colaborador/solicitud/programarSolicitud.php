@@ -3,7 +3,7 @@ require_once (__DIR__ . '/../../../logica/Solicitud.php');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$id = isset($_POST['id']);
+$id = $_POST['id'];
 $fechaProgramada = !empty($_POST['fecha_programada']) ? $_POST['fecha_programada'] : null;
 $estado = $_POST["estado"];
 if($fechaProgramada){
@@ -12,6 +12,8 @@ if($fechaProgramada){
 $solicitud = new Solicitud();
 $solicitud->actualizar($id,$fechaProgramada,$estado);
 
-// echo $_POST["correoUsuario"];
+$_SESSION["email_pending"] = $_POST["correoUsuario"];
+$_SESSION["dia"] = $fechaProgramada;
+header("Location: /puntos-reciclaje/vista/Colaborador/solicitud/enviarCorreo.php");
 exit();
 ?>

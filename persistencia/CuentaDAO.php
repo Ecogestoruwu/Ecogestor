@@ -6,12 +6,7 @@ class CuentaDAO{
     }
 
     public function consultarTodos() {
-        return "SELECT 
-            idCuenta,
-            correo,
-            clave,
-            rol,
-            estado
+        return "SELECT idCuenta,correo,clave,rol,estado
         FROM Cuenta;";
     }
     // ... (consultarPorCorreo, cambiarClave, registrar ya existen y están bien) ...

@@ -47,7 +47,7 @@
                         <input type="hidden" name="estado" value="<?= $solicitud->getEstado() ?>">
                     </td>
                     <td>
-                        <input type="hidden" name="correoUsuario" value="<?= $solicitud->getUsuario()->getNombre()?>">
+                        <input type="hidden" name="correoUsuario" value="<?= $solicitud->getUsuario()->getCuenta()->getCorreo()?>">
                         <input type="hidden" name="colaborador_id"
                             value="<?= $solicitud->getColaborador()->getIdColaborador() ?>">
                         <button type="submit" class="btn btn-sm btn-primary">Programar</button>
