@@ -1,7 +1,7 @@
 <?php
 require_once (__DIR__ . '/../persistencia/Conexion.php');
 require_once (__DIR__ . '/../persistencia/ColaboradorDAO.php');
-require_once (__DIR__ . '/../persistencia/CuentaDAO.php'); // Para actualizar correo
+require_once (__DIR__ . '/Cuenta.php'); // Para actualizar correo
 require_once (__DIR__ . '/Cuenta.php');
 
 class Colaborador{
@@ -22,7 +22,21 @@ class Colaborador{
         $this->direccion = $direccion;
         $this->foto_perfil = $foto_perfil;
     }
-
+    public function mapearPorId(){
+        $colaboradores = [];
+        $cuenta = new Cuenta();
+        $cuentas = $cuenta -> mapearPorId();
+        $conexion = new Conexion();
+        $conexion -> abrirConexion();
+        $colaboradorDAO = new ColaboradorDAO();
+        $conexion -> ejecutarConsulta($colaboradorDAO -> consultarTodos());
+        while($registro = $conexion -> siguienteRegistro()){            
+            $colaborador = new Colaborador($registro[0], $registro[1],$registro[2],$registro[3],$registro[4],$registro[5],$cuentas[$registro[6]]);
+            $colaboradores[$registro[0]] = $colaborador;
+        }
+        $conexion -> cerrarConexion();
+        return $colaboradores;   
+    }
     public function registrar($nombre, $servicio_ofrecido, $idCuenta){
         $conexion = new Conexion();
         $conexion->abrirConexion();

@@ -1,6 +1,8 @@
 <?php
 require_once(__DIR__ . '/../../logica/Colaborador.php');
 require_once(__DIR__ . '/../../logica/Cuenta.php');
+require_once(__DIR__ . '/../../logica/Solicitud.php');
+require_once(__DIR__ . '/../../logica/Usuario.php');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -25,12 +27,21 @@ $cuenta = $_SESSION["cuenta"] ?? ($colaborador && method_exists($colaborador, 'g
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
                 <li class="nav-item">
                     <a class="nav-link" href="/puntos-reciclaje/vista/Colaborador/actualizarDatos.php">Actualizar mis datos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/puntos-reciclaje/vista/Colaborador/residuosColaborador.php">Gestionar residuos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Colaborador/registroPublicidad/registrarPublicidad.php">publicar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Colaborador/registro_P_Recolect/registrarP_Recolect.php">registrar punto_recoleccion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Colaborador/solicitud/verSolicitudes.php">ver solicitudes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/puntos-reciclaje/index.php?cerrarSesion=1">Cerrar sesión</a>

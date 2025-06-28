@@ -4,6 +4,17 @@ class UsuarioDAO{
         // Puede estar vacío
     }
 
+    public function consultarTodos() {
+        return "SELECT 
+            idUsuario,
+            nombre,
+            apellido,
+            telefono,
+            nickname,
+            foto_perfil,
+            idCuenta
+        FROM Usuario;";
+    }
     public function registrar(Conexion $conexion, $nombre, $apellido, $idCuenta){
         $sql = "INSERT INTO Usuario (nombre, apellido, idCuenta) VALUES (?, ?, ?)";
         $stmt = $conexion->prepararConsulta($sql);

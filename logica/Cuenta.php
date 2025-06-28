@@ -8,10 +8,26 @@ class Cuenta{
     // private $clave; // No almacenar la clave (ni siquiera codificada) en el objeto si no es necesario
     private $rol;
     private $estado;
-    public function __construct($idCuenta=0, $correo="", $rol=0){
+    public function __construct($idCuenta=0, $correo="", $rol=0,$estado=0){
         $this->idCuenta = $idCuenta;
         $this->correo = $correo;
         $this->rol = $rol;
+        $this->estado = $estado;
+    }
+    public function mapearPorId(){
+        $cuentas = [];
+        
+        $conexion = new Conexion();
+        $conexion -> abrirConexion();
+        $cuentaDAO = new CuentaDAO();
+        $conexion -> ejecutarConsulta($cuentaDAO -> consultarTodos());
+        
+        while($registro = $conexion -> siguienteRegistro()){            
+            $cuenta = new Cuenta($registro[0], $registro[1],$registro[2],$registro[3]);
+            $cuentas[$registro[0]] = $cuenta;
+        }
+        $conexion -> cerrarConexion();
+        return $cuentas;   
     }
     /**
      * Registra una nueva cuenta, CODIFICANDO la contraseña con base64.

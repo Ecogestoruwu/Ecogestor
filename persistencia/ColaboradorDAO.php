@@ -4,7 +4,17 @@ class ColaboradorDAO{
     public function __construct(){
         // Puede estar vacío
     }
-
+    public function consultarTodos() {
+        return "SELECT 
+            idColaborador,
+            nombre,
+            servicio_ofrecido,
+            telefono,
+            direccion,
+            foto_perfil,
+            idCuenta
+        FROM Colaborador;";
+    }
     public function registrar(Conexion $conexion, $nombre, $servicio_ofrecido, $idCuenta){
         $sql = "INSERT INTO Colaborador (nombre, servicio_ofrecido, idCuenta) 
                 VALUES (?, ?, ?)";
