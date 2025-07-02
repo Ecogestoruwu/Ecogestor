@@ -3,6 +3,9 @@ class ResiduoDAO {
     public function consultarTodos() {
         return "SELECT * FROM Residuo;";
     }
+    public function clasificar_nombre($nombre){
+        return "SELECT * FROM Residuo where nombre = '$nombre';";
+    }
     public function listarTodos($conexion) {
         $sql = "SELECT idResiduo, nombre, descripcion, categoria FROM residuo ORDER BY nombre ASC";
         $stmt = $conexion->prepararConsulta($sql);

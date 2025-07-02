@@ -13,9 +13,32 @@ class Residuo {
         $this->descripcion = $descripcion;
         $this->categoria = $categoria;
     }
+    public function listar(){
+        $residuos = array();
+        $conexion = new Conexion();
+        $conexion -> abrirConexion();
+        $residuoDAO = new ResiduoDAO;
+        $conexion -> ejecutarConsulta($residuoDAO -> consultarTodos());
+        while($registro = $conexion -> siguienteRegistro()){            
+            $residuo = new Residuo($registro[0], $registro[1],$registro[2],$registro[3]);
+            array_push($residuos,$residuo);
+        }
+        $conexion -> cerrarConexion();
+        return $residuos;
+    }
+    public function clasificar_nombre($nombre){
+        $conexion = new Conexion();
+        $conexion -> abrirConexion();
+        $residuoDAO = new ResiduoDAO;
+        $conexion -> ejecutarConsulta($residuoDAO -> clasificar_nombre($nombre));
+        $registro = $conexion -> siguienteRegistro();          
+        $residuo = new Residuo($registro[0], $registro[1],$registro[2],$registro[3]);
+
+        $conexion -> cerrarConexion();
+        return $residuo;
+    }
     public function mapearPorId(){
         $residuos = [];
-        
         $conexion = new Conexion();
         $conexion -> abrirConexion();
         $residuoDAO = new ResiduoDAO;

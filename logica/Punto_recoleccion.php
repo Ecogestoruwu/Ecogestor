@@ -1,7 +1,7 @@
 <?php
 require_once (__DIR__ . '/../persistencia/Conexion.php');
 require_once (__DIR__ . '/../persistencia/Punto_recoleccionDAO.php');
-require_once (__DIR__ . '/../persistencia/ColaboradorDAO.php');
+require_once (__DIR__ . '/Colaborador.php');
 class Punto_recoleccion{
     private $idPunto_Recoleccion;
     private $nombre;
@@ -28,7 +28,22 @@ class Punto_recoleccion{
         $this->estado = $estado;
         $this->colaborador = $colaborador;
     }
-
+    public function listar(){
+        $colaborador = new Colaborador();
+        $colaboradores = $colaborador -> mapearPorId();
+        $puntos = array();
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $puntoDAO = new Punto_recoleccionDAO(); 
+        $conexion -> ejecutarConsulta($puntoDAO -> consultarTodos());
+        while($registro = $conexion -> siguienteRegistro()){            
+            $punto = new Punto_recoleccion($registro[0], $registro[1],$registro[2],$registro[3]
+        ,$registro[4],$registro[5],$colaboradores[$registro[6]]);
+            array_push($puntos,$punto);
+        }
+        $conexion -> cerrarConexion();
+        return $puntos;
+    }
     public function registrar($nombre, $direccion, $latitud, $longitud, $estado, $colaborador_id) {
         $conexion = new Conexion();
         $conexion->abrirConexion();
@@ -41,7 +56,22 @@ class Punto_recoleccion{
         $conexion->cerrarConexion();
         return true;
     }
-
+    public function clasificar_by_categoria($categoria){
+        $colaborador = new Colaborador();
+        $colaboradores = $colaborador -> mapearPorId();
+        $puntos = array();
+        $conexion = new Conexion();
+        $conexion->abrirConexion();
+        $puntoDAO = new Punto_recoleccionDAO(); 
+        $conexion -> ejecutarConsulta($puntoDAO -> clasificar_by_categoria($categoria));
+        while($registro = $conexion -> siguienteRegistro()){            
+            $punto = new Punto_recoleccion($registro[0], $registro[1],$registro[2],$registro[3]
+        ,$registro[4],$registro[5],$colaboradores[$registro[6]]);
+            array_push($puntos,$punto);
+        }
+        $conexion -> cerrarConexion();
+        return $puntos;
+    }
     // Getter & Setter for idPunto_Recoleccion
     public function getIdPuntoRecoleccion() {
         return $this->idPunto_Recoleccion;
