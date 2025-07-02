@@ -20,6 +20,11 @@ class Punto_recoleccionDAO{
             $colaborador_id
         );";
     }
-
+    public function consultarTodos(){
+        return "SELECT * FROM punto_recoleccion";
+    }
+    public function clasificar_by_categoria($categoria) {
+        return "SELECT * FROM punto_recoleccion WHERE nombre LIKE '%$categoria%'";
+    }
 }
 ?>

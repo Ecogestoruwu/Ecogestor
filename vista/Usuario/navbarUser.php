@@ -1,5 +1,8 @@
 <?php
 require_once(__DIR__ . '/../../logica/Usuario.php');
+require_once(__DIR__ . '/../../logica/Residuo.php');
+require_once(__DIR__ . '/../../logica/Colaborador.php');
+require_once(__DIR__ . '/../../logica/Punto_recoleccion.php');
 session_start();
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -27,10 +30,22 @@ $cuenta = $_SESSION["cuenta"];
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/actualizarDatos.php">Actualizar mis datos</a>
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/actualizarDatos.php">Actualizar mis
+                        datos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/indexUsuario.php">Ver puntos de reciclaje</a>
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/indexUsuario.php">Ver puntos de
+                        reciclaje</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="/puntos-reciclaje/vista/Usuario/clasificacionResiduo/clasificacion.php">clasificacion de
+                        residuos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/mapeo/mapearPuntos.php" target="_blank">
+                        Ver ubicaciones en el mapa
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/puntos-reciclaje/index.php?cerrarSesion=1">Cerrar sesión</a>
