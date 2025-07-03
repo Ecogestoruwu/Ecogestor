@@ -3,6 +3,7 @@ require_once(__DIR__ . '/../../logica/Usuario.php');
 require_once(__DIR__ . '/../../logica/Residuo.php');
 require_once(__DIR__ . '/../../logica/Colaborador.php');
 require_once(__DIR__ . '/../../logica/Punto_recoleccion.php');
+require_once(__DIR__ . '/../../logica/Publicacion.php');
 session_start();
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -47,6 +48,19 @@ $cuenta = $_SESSION["cuenta"];
                         Ver ubicaciones en el mapa
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="publicacionDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Publicaciones
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="publicacionDropdown">
+                        <li><a class="dropdown-item" href="/puntos-reciclaje/vista/Usuario/publicacion/PublicacionNoticia.php">Noticia</a></li>
+                        <li><a class="dropdown-item" href="/puntos-reciclaje/vista/Usuario/publicacion/PublicacionInf.php">recurso informativo</a></li>
+                        <li><a class="dropdown-item" href="/puntos-reciclaje/vista/Usuario/publicacion/PublicacionVideo.php">video</a></li>
+                    </ul>
+                </li>
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="/puntos-reciclaje/index.php?cerrarSesion=1">Cerrar sesión</a>
                 </li>
