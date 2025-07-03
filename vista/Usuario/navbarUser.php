@@ -4,6 +4,7 @@ require_once(__DIR__ . '/../../logica/Residuo.php');
 require_once(__DIR__ . '/../../logica/Colaborador.php');
 require_once(__DIR__ . '/../../logica/Punto_recoleccion.php');
 require_once(__DIR__ . '/../../logica/Publicacion.php');
+require_once(__DIR__ . '/../../logica/Comentario.php');
 session_start();
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -35,17 +36,18 @@ $cuenta = $_SESSION["cuenta"];
                         datos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/indexUsuario.php">Ver puntos de
-                        reciclaje</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link"
                         href="/puntos-reciclaje/vista/Usuario/clasificacionResiduo/clasificacion.php">clasificacion de
                         residuos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/mapeo/mapearPuntos.php" target="_blank">
-                        Ver ubicaciones en el mapa
+                        Ver puntos de reciclaje
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/puntos-reciclaje/vista/Usuario/preguntas/preguntas_frec.php">
+                        Preguntas frecuentes
                     </a>
                 </li>
                 <li class="nav-item dropdown">
